@@ -1,26 +1,41 @@
-# School Library Borrowing App
-# RP05 Software Design - Assignment 1
-#
-# My design has 4 modules (each one is a class):
-#   1. Catalog      -> keeps track of the books
-#   2. Members      -> keeps track of the students
-#   3. LoanManager  -> the borrowing rules (borrow, return, overdue)
-#   4. LibraryMenu  -> the text menu the librarian uses
-#
-# The menu only talks to LoanManager, Catalog and Members through their
-# public methods. Nobody touches another class's dictionaries directly.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 from datetime import date, timedelta
 
-LOAN_DAYS = 14          # a book can be borrowed for 2 weeks
-MAX_BOOKS = 3           # a student can have at most 3 books at once
+LOAN_DAYS = 14        
+MAX_BOOKS = 3         
 
 
 class Catalog:
-    """Responsibility: know which books the library owns and if they are on the shelf."""
-
     def __init__(self):
-        # hidden inside the module: book_id -> {"title", "author", "available"}
+
+        
+        
         self._books = {}
 
     def add_book(self, book_id, title, author):
@@ -29,6 +44,17 @@ class Catalog:
         self._books[book_id] = {"title": title, "author": author, "available": True}
         return True
 
+
+
+
+
+
+
+
+
+
+
+    
     def find_book(self, book_id):
         return self._books.get(book_id)
 
@@ -40,6 +66,29 @@ class Catalog:
         if book_id in self._books:
             self._books[book_id]["available"] = available
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     def search(self, word):
         word = word.lower()
         results = []
@@ -50,18 +99,19 @@ class Catalog:
 
 
 class Members:
-    """Responsibility: know which students are allowed to use the library."""
-
     def __init__(self):
-        # hidden inside the module: student_id -> {"name", "grade"}
         self._students = {}
-
     def add_student(self, student_id, name, grade):
         if student_id in self._students:
             return False
         self._students[student_id] = {"name": name, "grade": grade}
         return True
 
+
+
+
+
+    
     def is_member(self, student_id):
         return student_id in self._students
 
@@ -71,13 +121,10 @@ class Members:
 
 
 class LoanManager:
-    """Responsibility: apply the borrowing rules (limit, due date, overdue)."""
 
     def __init__(self, catalog, members):
-        # LoanManager only uses Catalog and Members through their methods
         self.catalog = catalog
         self.members = members
-        # hidden inside the module: book_id -> {"student_id", "due"}
         self._loans = {}
 
     def _count_loans(self, student_id):
@@ -123,13 +170,11 @@ class LoanManager:
 
 
 class LibraryMenu:
-    """Responsibility: talk to the librarian (show menu, read input, print results)."""
 
     def __init__(self, catalog, members, loans):
         self.catalog = catalog
         self.members = members
         self.loans = loans
-
     def run(self):
         while True:
             print("\n=== School Library ===")
@@ -141,7 +186,6 @@ class LibraryMenu:
             print("6. Show overdue books")
             print("0. Exit")
             choice = input("Choose: ").strip()
-
             if choice == "1":
                 ok = self.catalog.add_book(input("Book ID: "), input("Title: "), input("Author: "))
                 print("Book added." if ok else "That book ID already exists.")
@@ -178,7 +222,6 @@ def load_sample_data(catalog, members):
 
 
 def run_tests():
-    # quick checks to show the rules work
     catalog, members = Catalog(), Members()
     load_sample_data(catalog, members)
     loans = LoanManager(catalog, members)
